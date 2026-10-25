@@ -11,14 +11,13 @@ def label_smoothing(logits: np.ndarray, y: int, eps: float) -> tuple[np.ndarray,
 
     Return (q, loss).
     """
-    C = len(logits)
-
+    # TODO: smooth EVERY class by eps/C first, then add the remaining
+    # mass (1 - eps) onto the true class y.
+    C=len(logits)
     q = np.full(C, eps / C, dtype=float)
     q[y] += 1.0 - eps
-
     shifted = logits - np.max(logits)
     log_probs = shifted - np.log(np.sum(np.exp(shifted)))
-
     loss = -np.sum(q * log_probs)
-
     return q, float(loss)
+    pass
